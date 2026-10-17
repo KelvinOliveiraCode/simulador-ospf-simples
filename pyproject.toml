@@ -1,0 +1,22 @@
+[project]
+name = "simulador-ospf-simples"
+version = "0.1.0"
+description = "Simulador OSPF simplificado com tabela de roteamento (Python)"
+requires-python = ">=3.10"
+authors = [{ name = "Kelvin Oliveira" }]
+license = { text = "MIT" }
+dependencies = []
+
+[project.scripts]
+ospf-simulador = "simulador_ospf_simples.__main__:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
