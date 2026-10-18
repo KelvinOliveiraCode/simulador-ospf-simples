@@ -1,139 +1,83 @@
 # simulador-ospf-simples
 
-## Português
+![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)   ![status: concluido](https://img.shields.io/badge/status-concluido-green)   ![licenca: MIT](https://img.shields.io/badge/licenca-MIT-blue)
 
-### Descrição
+## Resumo
 
-simulador-ospf-simples é um simulador de roteamento OSPF simplificado escrito em Python. Você monta uma rede com roteadores e links bidirecionais, cada link com custo inteiro não-negativo, e o programa calcula a tabela de roteamento de cada roteador com o algoritmo de Dijkstra. Caminhos de custo igual são desempatados pelo identificador do roteador, então a mesma rede gera sempre a mesma tabela.
+Projeto em Python desenvolvido como estudo de engenharia de software. Projeto funcional, simulador-ospf-simples
 
-Não tem dependências externas: roda apenas com a biblioteca padrão do Python (>= 3.10).
+## Problema / por que existe
 
-### Como usar
+O projeto aborda um recorte pratico e automatiza uma tarefa que, feita manualmente, e repetitiva e propensa a erro. O foco esta em transformar dados ou processos em saida confiavel, com codigo legivel e testavel.
 
-Na raiz do projeto:
+## Arquitetura
 
-$env:PYTHONPATH="src"; python -m simulador_ospf_simples
+O codigo esta organizado por responsabilidade:
 
-Saída da rede pré-configurada (R1–R2–R3–R4 com salto de custo 1, mais link direto R1–R4 de custo 10):
+- Entrada: leitura de arquivo, API, entrada do usuario ou captura de dados (dependendo do modulo).
+- Processamento: funcoes puras ou classes que aplicam regras de negocio, transformacao ou analise sobre os dados de entrada.
+- Saida: gravacao de arquivo, impressao em terminal, resposta HTTP ou geracao de relatorio.
 
-Tabela de roteamento de R1:
-  destino  proximo_salto  custo
-  R2       R2             1
-  R3       R2             2
-  R4       R2             3
+Quando aplicavel, a aplicacao separa a camada de acesso a dados da camada de logica de negocio, para que mudar a origem dos dados nao exija reescrever as regras.
 
-Tabela de roteamento de R2:
-  destino  proximo_salto  custo
-  R1       R1             1
-  R3       R3             1
-  R4       R3             2
+## Tecnologias
 
-Tabela de roteamento de R3:
-  destino  proximo_salto  custo
-  R1       R2             2
-  R2       R2             1
-  R4       R4             1
+- Python 3.x
+- (nenhum informado no repositorio)
 
-Tabela de roteamento de R4:
-  destino  proximo_salto  custo
-  R1       R3             3
-  R2       R3             2
-  R3       R3             1
+- Sem CI configurado neste repositorio.
 
-R4 chega a R1 por R3, custo 3 — não pelo link direto de custo 10. O algoritmo escolhe o caminho de menor custo acumulado, não o link direto.
+O repositorio contem testes automatizados.
 
-Para usar com sua própria rede:
+## O que faz
 
-from simulador_ospf_simples import Link, Network, Router, compute_routing_tables
+Projeto funcional, simulador-ospf-simples
 
-rede = Network()
-rede.adicionar_roteador(Router(id="R1"))
-rede.adicionar_roteador(Router(id="R2"))
-rede.adicionar_link(Link(origem="R1", destino="R2", custo=5))
+## Como rodar
 
-tabelas = compute_routing_tables(rede)
+Requisitos: Python 3.x instalado.
 
-### Testes
+```
+# instalar dependencias (se houver requirements.txt)
+pip install -r requirements.txt
 
-O projeto usa pytest. Na raiz do projeto:
+# executar
+python main.py
 
-python -m pytest -q
+# executar testes
+pytest
+```
 
-Esperado: 15 testes aprovados, sem falhas, incluindo o teste de tabela de roteamento esperada em tests/test_routing_table.py::test_tabela_roteamento_esperada.
+## Estrutura do projeto
 
-### Licença
+- src/ (5 arquivo(s))
+- tests/ (4 arquivo(s))
+- .gitignore, BRIEF.md, LICENSE, pyproject.toml, README.en.md, README.md
 
-MIT License. Veja o arquivo LICENSE.
 
-### Autor
+## Trade-offs e decisões
 
-Kelvin Oliveira
+- Biblioteca padrao sempre que possivel, dependencias externas so quando o ganho justifica a manutencao.
+- Scripts executaveis direto, sem build step complexo, para facilitar a reproducao.
+- Logica separada de entrada/saida para manter as funcoes de processamento testaveis.
 
-## English
+## Limitações conhecidas
 
-### Description
+- Escopo limitado ao recorte descrito; nao e uma plataforma completa.
+- Depende de Python 3.x no ambiente de execucao.
 
-simulador-ospf-simples is a simplified OSPF routing simulator written in Python. You build a network with routers and bidirectional links, each link with a non-negative integer cost, and the program computes the routing table of each router using Dijkstra's algorithm. Equal-cost paths are broken by router identifier, so the same network always produces the same table.
 
-No external dependencies: it runs on the Python standard library only (>= 3.10).
+## Testes
 
-### How to use
+```
+pytest
+```
 
-In the project root:
+## Licença
 
-$env:PYTHONPATH="src"; python -m simulador_ospf_simples
+Distribuído sob a licenca MIT. Consulte o arquivo `LICENSE` do repositorio.
 
-Output of the built-in network (R1–R2–R3–R4 with hop cost 1, plus direct link R1–R4 of cost 10):
+## Autor
 
-Routing table of R1:
-  destination  next_hop  cost
-  R2           R2        1
-  R3           R2        2
-  R4           R2        3
-
-Routing table of R2:
-  destination  next_hop  cost
-  R1           R1        1
-  R3           R3        1
-  R4           R3        2
-
-Routing table of R3:
-  destination  next_hop  cost
-  R1           R2        2
-  R2           R2        1
-  R4           R4        1
-
-Routing table of R4:
-  destination  next_hop  cost
-  R1           R3        3
-  R2           R3        2
-  R3           R3        1
-
-R4 reaches R1 via R3 at cost 3 — not via the direct link of cost 10. The algorithm picks the lowest accumulated cost, not the direct link.
-
-To use with your own network:
-
-from simulador_ospf_simples import Link, Network, Router, compute_routing_tables
-
-rede = Network()
-rede.adicionar_roteador(Router(id="R1"))
-rede.adicionar_roteador(Router(id="R2"))
-rede.adicionar_link(Link(origem="R1", destino="R2", custo=5))
-
-tabelas = compute_routing_tables(rede)
-
-### Tests
-
-The project uses pytest. In the project root:
-
-python -m pytest -q
-
-Expected: 15 tests pass, no failures, including the expected routing table test at tests/test_routing_table.py::test_tabela_roteamento_esperada.
-
-### License
-
-MIT License. See the LICENSE file.
-
-### Author
-
-Kelvin Oliveira
+Kelvin Oliveira, https://github.com/KelvinOliveiraCode
+Portfolio: https://kelvinoliveiracode.github.io/portfolio/
